@@ -1,106 +1,45 @@
-import axios from 'axios';
-import { useState } from 'react';
-import OKMessage from './OKMessage';
-import ErrorMessage from './ErrorMessage';
-import {
-  Button,
-  Container,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  ListSubheader,
-  Stack,
-  SwipeableDrawer,
-} from '@mui/material';
+import { useEffect, useState } from 'react';
+import { OKMessage, ErrorMessage } from '@/components';
+import { Button, Container, Stack } from '@mui/material';
+import { usePostAgrupaciones } from '@/hooks/useAgrupaciones';
 
 interface Archivo {
   archivo: Blob;
   archivoNombre: string;
 }
 
-function CargaExcel() {
-  axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
-  axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
-
+export function CargaExcel() {
   const [archivo, setArchivo] = useState<Archivo>();
-  const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState();
-  const [errors, setErrors] = useState([]);
-  const [request, setRequest] = useState(0);
+  const formData = new FormData();
 
-  function changeArchivo(event) {
-    setArchivo({
-      archivo: event.target.files[0],
-      archivoNombre: event.target.files[0].name,
-    });
+  function changeArchivo(event: React.ChangeEvent<HTMLInputElement>) {
+    event.target.files !== null
+      ? setArchivo({
+          archivo: event.target.files[0],
+          archivoNombre: event.target.files[0].name,
+        })
+      : setArchivo({ archivo: new Blob(), archivoNombre: '' });
   }
-  async function cargaArchivo() {
-    setRequest(0);
-    const formData = new FormData();
+
+  const mutation = usePostAgrupaciones();
+
+  const handleSubmit = () => {
+    mutation.mutate(formData);
+  };
+
+  useEffect(() => {
     if (archivo) {
       formData.append('file', archivo.archivo, archivo.archivoNombre);
     }
+  }, [archivo]);
 
-    await axios
-      .post('http://localhost:8080/carga', formData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((response) => {
-        setMessage(response.data.message);
-        setRequest(response.status);
-      })
-      .catch((error) => {
-        setMessage(error.response.data.message);
-        setErrors(error.response.data.errors);
-        setRequest(error.response.request.status);
-      });
-  }
+  console.log(mutation.error);
 
-  const toggleDrawer =
-    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event &&
-        event.type === 'keydown' &&
-        ((event as React.KeyboardEvent).key === 'Tab' ||
-          (event as React.KeyboardEvent).key === 'Shift')
-      ) {
-        return;
-      }
-      setOpen(open);
-    };
+  if (mutation.isPending) return <h1>Cargando el archivo...</h1>;
 
   return (
     <>
-      <SwipeableDrawer
-        anchor="left"
-        open={open}
-        onClose={toggleDrawer(false)}
-        onOpen={toggleDrawer(true)}
-      >
-        <List style={{ padding: '20px' }}>
-          <ListSubheader>Sidebar Menu</ListSubheader>
-          <ListItem>
-            <ListItemButton>
-              <ListItemText primary="Item 1" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton>
-              <ListItemText primary="Item 2" />
-            </ListItemButton>
-          </ListItem>
-        </List>
-      </SwipeableDrawer>
-
       <Container maxWidth="sm">
-        <Stack>
-          <Button onClick={toggleDrawer(true)} variant="outlined">
-            Open Drawer
-          </Button>
-        </Stack>
         <Stack spacing={2}>
           <h1>Carga Excel</h1>
           <input
@@ -108,26 +47,17 @@ function CargaExcel() {
             onChange={(e) => changeArchivo(e)}
             accept=".xlsx, .xls"
           />
-          <Button variant="contained" onClick={cargaArchivo}>
+          <Button variant="contained" onClick={handleSubmit}>
             Carga
           </Button>
-          {message && errors.length == 0 && request == 200 ? (
-            <OKMessage message={message} />
+          {mutation.isError ? (
+            <ErrorMessage error={mutation.error.message} />
           ) : null}
-          {request === 400 ? <ErrorMessage error={message} index={0} /> : null}
-          {errors.length > 0
-            ? errors.map((error, index) => {
-                return (
-                  <>
-                    <ErrorMessage error={error} index={index} />
-                  </>
-                );
-              })
-            : null}
+          {mutation.isSuccess ? (
+            <OKMessage message={mutation.data.message} />
+          ) : null}
         </Stack>
       </Container>
     </>
   );
 }
-
-export default CargaExcel;

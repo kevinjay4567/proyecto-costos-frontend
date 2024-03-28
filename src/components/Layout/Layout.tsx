@@ -1,6 +1,6 @@
 import { ReactNode, useState } from 'react';
-import { ToolBar, SideBar } from '@/components/Layout/components';
 import { Box, Toolbar } from '@mui/material';
+import { SideBar, ToolBar } from '@/components';
 
 export const Layout = ({ children }: { children: ReactNode }) => {
   const [open, setOpen] = useState(false);

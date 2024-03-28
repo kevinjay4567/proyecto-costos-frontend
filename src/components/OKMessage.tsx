@@ -4,8 +4,7 @@ interface Props {
   message: string;
 }
 
-function OKMessage({ message }: Props) {
+export function OKMessage({ message }: Props) {
   return <Alert severity="success">{message}</Alert>;
 }
 
-export default OKMessage;

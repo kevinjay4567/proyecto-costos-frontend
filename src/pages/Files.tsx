@@ -1,32 +1,38 @@
-import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useGetAllAgrupaciones } from '@/hooks/useAgrupaciones';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+
+import { useEffect } from 'react';
 
 const columns: GridColDef[] = [
   { field: 'subcuenta', headerName: 'Subcuenta', width: 200 },
-  { field: 'descripcion', headerName: 'Descripcion', width: 600 },
-  { field: 'agrupacion', headerName: 'Agrupacion'},
+  { field: 'descripcion', headerName: 'Descripcion', width: 500 },
+  { field: 'agrupacion', headerName: 'Agrupacion', width: 300 },
+  { field: 'anho', headerName: 'Año' },
 ];
 
-export default function Files() {
-  const [rows, setRows] = useState<GridRowsProp>([]);
+export function Files() {
+  const { data, isLoading } = useGetAllAgrupaciones();
 
-  useEffect(() => {
-    axios
-      .get('http://localhost:8080/files/agrupaciones')
-      .then((response) => {
-        setRows(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  });
+  useEffect(() => {}, [data]);
+
+  console.log(data);
+
+  if (isLoading)
+    return (
+      <DataGrid
+        sx={{ height: '88dvh', maxWidth: '75dvw', margin: '0 auto' }}
+        rows={[]}
+        columns={columns}
+        loading
+      ></DataGrid>
+    );
+
   return (
     <>
       <DataGrid
-      sx={{height: '88dvh', maxWidth: '75dvw', margin: '0 auto'}}
+        sx={{ height: '88dvh', maxWidth: '75dvw', margin: '0 auto' }}
         getRowId={(row) => row.subcuenta}
-        rows={rows}
+        rows={data}
         columns={columns}
       />
     </>

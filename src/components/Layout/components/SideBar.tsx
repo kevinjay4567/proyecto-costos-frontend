@@ -2,16 +2,25 @@ import { Drawer, List, ListItem, ListItemText, Toolbar } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 interface Props {
-  barStatus: boolean
+  barStatus: boolean;
 }
 
-export function SideBar({barStatus} : Props) {
-
+export function SideBar({ barStatus }: Props) {
   const links = [
     {
       id: 0,
+      title: 'Home',
+      url: '/',
+    },
+    {
+      id: 1,
+      title: 'Cargar Archivo Nuevo',
+      url: '/carga',
+    },
+    {
+      id: 2,
       title: 'Login',
-      url: './login',
+      url: '/login',
     },
   ];
 
