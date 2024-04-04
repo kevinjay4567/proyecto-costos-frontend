@@ -1,17 +1,29 @@
-import { useGetAllAgrupaciones } from '@/hooks/useAgrupaciones';
+import { useGetAllBalances } from '@/hooks';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-
 import { useEffect } from 'react';
 
 const columns: GridColDef[] = [
-  { field: 'subcuenta', headerName: 'Subcuenta', width: 200 },
-  { field: 'descripcion', headerName: 'Descripcion', width: 500 },
-  { field: 'agrupacion', headerName: 'Agrupacion', width: 300 },
-  { field: 'anho', headerName: 'Año' },
+  {
+    field: 'concepto',
+    headerName: 'Concepto',
+    valueGetter: (value) => value.value.nombre,
+  },
+  {
+    field: 'empresa',
+    headerName: 'Empresa',
+    valueGetter: (value) => value.value.nombre,
+  },
+  { field: 'sede', headerName: 'Sede', valueGetter: (value) => value.value.id },
+  {
+    field: 'subcuenta',
+    headerName: 'Subcuenta',
+    valueGetter: (value) => value.value.id,
+  },
+  { field: 'valor', headerName: 'Valor' },
 ];
 
 export function Files() {
-  const { data, isLoading } = useGetAllAgrupaciones();
+  const { data, isLoading } = useGetAllBalances();
 
   useEffect(() => {}, [data]);
 
@@ -32,7 +44,7 @@ export function Files() {
       <DataGrid
         sx={{ height: '88dvh', maxWidth: '75dvw', margin: '0 auto' }}
         getRowId={(row) => row.subcuenta}
-        rows={data}
+        rows={data !== undefined ? data : []}
         columns={columns}
       />
     </>
