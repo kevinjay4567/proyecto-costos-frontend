@@ -3,12 +3,12 @@ import { api, queryCLient } from '@/config'
 import { Agrupaciones } from '@/interfaces/AgrupacionesType';
 
 async function getAllAgrupaciones() {
-  const { data } = await api.get<Agrupaciones[]>('/files/agrupaciones');
+  const { data } = await api.get<Agrupaciones[]>('/files/balance');
   return data;
 }
 
 async function postAgrupaciones(formData: FormData) {
-  const { data } = await api.post('/file', formData)
+  const { data } = await api.post('/files/balance', formData)
   console.log(data)
   return data;
 }

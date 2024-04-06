@@ -31,7 +31,7 @@ export function CargaExcel() {
     if (archivo) {
       formData.append('file', archivo.archivo, archivo.archivoNombre);
     }
-  }, [archivo]);
+  });
 
   console.log(mutation.error);
 

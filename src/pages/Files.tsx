@@ -4,18 +4,24 @@ import { useEffect } from 'react';
 
 const columns: GridColDef[] = [
   {
-    field: 'concepto',
+    field: 'conceptoRelation',
     headerName: 'Concepto',
     valueGetter: (value) => value.value.nombre,
+    width: 150
   },
   {
-    field: 'empresa',
+    field: 'empresaRelation',
     headerName: 'Empresa',
     valueGetter: (value) => value.value.nombre,
+    width: 260
   },
-  { field: 'sede', headerName: 'Sede', valueGetter: (value) => value.value.id },
   {
-    field: 'subcuenta',
+    field: 'sedeRelation',
+    headerName: 'Sede',
+    valueGetter: (value) => value.value.id,
+  },
+  {
+    field: 'subcuentaRelation',
     headerName: 'Subcuenta',
     valueGetter: (value) => value.value.id,
   },
