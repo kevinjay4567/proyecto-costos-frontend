@@ -1,46 +1,22 @@
-import { useGetAllBalances } from '@/hooks';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { useEffect } from 'react';
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { useEffect } from "react";
 
-const columns: GridColDef[] = [
-  {
-    field: 'conceptoRelation',
-    headerName: 'Concepto',
-    valueGetter: (value) => value.value.nombre,
-    width: 150
-  },
-  {
-    field: 'empresaRelation',
-    headerName: 'Empresa',
-    valueGetter: (value) => value.value.nombre,
-    width: 260
-  },
-  {
-    field: 'sedeRelation',
-    headerName: 'Sede',
-    valueGetter: (value) => value.value.id,
-  },
-  {
-    field: 'subcuentaRelation',
-    headerName: 'Subcuenta',
-    valueGetter: (value) => value.value.id,
-  },
-  { field: 'valor', headerName: 'Valor' },
-];
+interface Props {
+  tableColumns: GridColDef[];
+  getData: Function;
+}
 
-export function Files() {
-  const { data, isLoading } = useGetAllBalances();
+export function Files({ tableColumns, getData }: Props) {
+  const { data, isLoading } = getData();
 
   useEffect(() => {}, [data]);
-
-  console.log(data);
 
   if (isLoading)
     return (
       <DataGrid
-        sx={{ height: '88dvh', maxWidth: '75dvw', margin: '0 auto' }}
+        sx={{ height: "88dvh", maxWidth: "75dvw", margin: "0 auto" }}
         rows={[]}
-        columns={columns}
+        columns={tableColumns}
         loading
       ></DataGrid>
     );
@@ -48,10 +24,10 @@ export function Files() {
   return (
     <>
       <DataGrid
-        sx={{ height: '88dvh', maxWidth: '75dvw', margin: '0 auto' }}
-        getRowId={(row) => row.subcuenta}
+        sx={{ height: "88dvh", maxWidth: "75dvw", margin: "0 auto" }}
+        getRowId={(row) => row.id}
         rows={data !== undefined ? data : []}
-        columns={columns}
+        columns={tableColumns}
       />
     </>
   );

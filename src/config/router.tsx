@@ -1,19 +1,27 @@
-import { createBrowserRouter } from 'react-router-dom';
-import { Login } from '@/pages/Login';
-import { Dashboard } from '@/pages/Home/Dashboard';
-import { Carga } from '@/pages/Carga';
+import { createBrowserRouter } from "react-router-dom";
+import { Login, Dashboard, DatosPersona } from "@/pages";
+import { Carga } from "@/pages/Carga";
+import { Balance } from "@/pages/Balance";
 
 export const routes = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <Dashboard />,
   },
   {
-    path: '/login',
+    path: "/datospersona",
+    element: <DatosPersona />,
+  },
+  {
+    path: "/balances",
+    element: <Balance />,
+  },
+  {
+    path: "/login",
     element: <Login />,
   },
   {
-    path: '/carga',
+    path: "/carga",
     element: <Carga />,
   },
 ]);

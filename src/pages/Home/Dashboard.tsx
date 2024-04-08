@@ -1,9 +1,9 @@
-import { Files } from '@/pages/Files';
-import { Layout } from '@/components/Layout';
+import { Files } from "@/pages/Files";
+import { Layout } from "@/components";
 
 export function Dashboard() {
   return (
-    <Layout>
+    <Layout title="Dashboard">
       <Files />
     </Layout>
   );
