@@ -1,5 +1,5 @@
-import { Layout } from "@/components";
-import { CargaExcel } from "@/components";
+import { CargaExcel, Layout } from "@/components";
+
 
 export function Carga() {
   return (
