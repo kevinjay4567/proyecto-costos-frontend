@@ -32,6 +32,11 @@ export function SideBar({ barStatus }: Props) {
       id: 4,
       title: "Datos Persona",
       url: "/datospersona",
+    },
+    {
+      id: 5,
+      title: "PTA",
+      url: "/pta",
     }
   ];
 

@@ -1,10 +1,9 @@
-import { Files } from "@/pages/Files";
 import { Layout } from "@/components";
 
 export function Dashboard() {
   return (
     <Layout title="Dashboard">
-      <Files />
+      <h1>Home Page</h1>
     </Layout>
   );
 }

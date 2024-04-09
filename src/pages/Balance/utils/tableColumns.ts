@@ -2,9 +2,8 @@ import { GridColDef } from "@mui/x-data-grid";
 
 export const columns: GridColDef[] = [
   {
-    field: "id",
+    field: "subcuenta_id",
     headerName: "Subcuenta",
-    valueGetter: (value) => value.value.subcuenta,
   },
   {
     field: "anho",
@@ -17,15 +16,15 @@ export const columns: GridColDef[] = [
   {
     field: "concepto",
     headerName: "Concepto",
-    valueGetter: (value) => value.value.concepto.id,
+    valueGetter: (value) => value.value.nombre,
   },
   {
-    field: "sede",
+    field: "sede_id",
     headerName: "Sede",
   },
   {
     field: "empresa",
     headerName: "Empresa",
-    valueGetter: (value) => value.value.empresa.nombre,
+    valueGetter: (value) => value.value.nombre,
   },
 ];
