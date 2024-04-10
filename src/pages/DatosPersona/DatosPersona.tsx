@@ -10,7 +10,6 @@ export function DatosPersona() {
       <Files
         tableColumns={columns}
         getData={useGetAllDatosPersonas}
-        idAttribute="id"
       />
     </Layout>
   );

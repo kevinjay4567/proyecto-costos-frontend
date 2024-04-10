@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Container, Stack } from '@mui/material';
-import { usePostPTA } from '@/hooks/usePTA';
+import { usePostPTA, usePostBalance } from '@/hooks';
 import { SubmitBtn } from '.';
-import { CargaMessage } from './CargaMessage';
+import { UseMutationResult } from '@tanstack/react-query';
 
 interface Archivo {
   archivo: Blob;
@@ -11,38 +11,47 @@ interface Archivo {
 
 export function CargaExcel() {
   const [archivo, setArchivo] = useState<Archivo>();
-  // const [option, setOption] = useState<String>("PTA");
+  const [option, setOption] = useState<String>("Balances");
   const formData = new FormData();
 
   function changeArchivo(event: React.ChangeEvent<HTMLInputElement>) {
+
     event.target.files !== null
       ? setArchivo({
         archivo: event.target.files[0],
         archivoNombre: event.target.files[0].name,
       })
       : setArchivo({ archivo: new Blob(), archivoNombre: '' });
+
   }
 
-  //const optionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  // setOption(e.target.value);
-  //}
+  function changePost(): UseMutationResult<any, Error, FormData> {
+
+    switch (option) {
+      case 'PTA': return usePostPTA();
+      default: return usePostBalance();
+    }
+
+  }
+
+  const optionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setOption(e.target.value);
+  }
 
   useEffect(() => {
+
     if (archivo) {
       formData.append('file', archivo.archivo, archivo.archivoNombre);
     }
+
   });
-
-  // mutation === undefined ? console.log("NA") : console.log(mutation.error);
-
-  // if (mutation?.isPending) return <h1>Cargando el archivo...</h1>;
 
   return (
     <>
       <Container maxWidth="sm">
         <Stack spacing={2}>
           <h1>Carga Excel</h1>
-          <select>
+          <select onChange={(e) => optionChange(e)}>
             <option>
               Balances
             </option>
@@ -58,8 +67,7 @@ export function CargaExcel() {
             onChange={(e) => changeArchivo(e)}
             accept=".xlsx, .xls"
           />
-          <SubmitBtn usePost={usePostPTA()} formData={formData} />
-          <CargaMessage mutation={usePostPTA()} />
+          <SubmitBtn usePost={changePost()} formData={formData} />
         </Stack>
       </Container>
     </>

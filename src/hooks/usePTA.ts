@@ -8,7 +8,6 @@ async function getAllPTAs() {
 
 async function postPTA(formData: FormData) {
   const { data } = await api.post('/files/pta', formData)
-  console.log(data)
   return data;
 }
 
